@@ -57,6 +57,7 @@ export default {
             this.$toast.fail(res.data.message)
           }else{
             localStorage.setItem('heima_token',res.data.data.token)
+            localStorage.setItem('heima_user',JSON.stringify(res.data.data.user))
             this.$router.push({name:'Personal'})
           }
       }else{
