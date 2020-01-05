@@ -6,3 +6,10 @@ export const login=(data)=>{
         data
     })
 }
+export const getUserById = (id)=>{
+    return axios({
+        method:'get',
+        url:`/user/${id}`,  //给个id
+      
+    })
+}

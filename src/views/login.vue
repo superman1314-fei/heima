@@ -58,11 +58,13 @@ export default {
           }else{
             localStorage.setItem('heima_token',res.data.data.token)
             localStorage.setItem('heima_user',JSON.stringify(res.data.data.user))
-            this.$router.push({name:'Personal'})
+            this.$router.push({path:`/personal/${res.data.data.user.id}`}) //传id进去
           }
       }else{
         this.$toast.fail('输入不合法')
       }
+       
+        
     },
   
   },

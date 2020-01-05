@@ -14,7 +14,7 @@ let router =new VueRouter({
         },
         {
             name:'Personal',
-            path:'/personal',
+            path:'/personal/:id',//添加id
             component:Personal
         }
     ]
@@ -32,6 +32,7 @@ router.beforeEach((to, from, next) => {
         }else{
             // 否则就跳转到登录页需要用户登录
             next({name:'Login'})
+            // next()
         }
     }else{
         // 如果不是访问需要授权的页面就不用判断是否登录
