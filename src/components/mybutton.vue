@@ -6,7 +6,9 @@
 </template>
 
 <script>
+
 export default {
+
    methods:{
        handlerclick(event){
         //    this拿到vue实例 $emit 发送数据给父组件
