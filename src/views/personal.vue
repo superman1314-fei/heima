@@ -46,7 +46,7 @@ export default {
       // console.log(res);
       if(res.data.message==="获取成功"){
         this.currentUser=res.data.data  //将数据赋值给currentUser
-        this.currentUser.head_img = 'http://127.0.0.1:3000' + this.currentUser.head_img
+        this.currentUser.head_img =this.currentUser.head_img
       }
   }
 }
