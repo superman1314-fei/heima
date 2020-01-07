@@ -15,6 +15,8 @@
 <script>
 import mycell from "../components/mycell"; //单向格
 import { getUserById } from "../apis/user"; //引入用户详情的api
+import { uploadFile } from "../apis/upload"; //引入文件上传api
+import { getUpDateById} from '../apis/user';// 编辑用户信息api
 export default {
   data() {
     return {
@@ -25,24 +27,45 @@ export default {
     mycell
   },
   methods: {
-    afterRead(file) {
+    async afterRead(file) {
       // 此时可以自行将文件上传至服务器
-      console.log(file);
+      
+      let formdata = new FormData();
+      formdata.append("file", file.file);
+      let res1 = await uploadFile(formdata);
+     if(res1.data.message==="文件上传成功"){
+        //  实现预览效果
+         this.currentUser.head_img = "http://127.0.0.1:3000"+res1.data.data.url
+
+            let res2 = await getUpDateById(this.$route.params.id,{head_img:this.currentUser.head_img})
+            // console.log(res2);
+            if(res2.data.message==="修改成功"){
+                this.$toast.success('修改成功')
+                this.currentUser.head_img=res2.data.data.head_img
+            }
+            console.log( this.currentUser);
+            
+
+     }
+        //  console.log(res1);
+    
+    //   console.log(file);
     }
   },
   async mounted() {
     //  console.log(this.$route.params.id);  可以获取id
     let res = await getUserById(this.$route.params.id);
     if (res.data.message === "获取成功") {
-            this.currentUser = res.data.data;
-            //判断是否存在图片 如果有图片就渲染出来  没有就给一个默认图片
-        if(this.currentUser.head_img){
-             this.currentUser.head_img = 'http://127.0.0.1:3000' +this.currentUser.head_img
-        }else{
-            this.currentUser.head_img='http://127.0.0.1:3000/uploads/image/lu.png'
-        }
+      this.currentUser = res.data.data;
+      //判断是否存在图片 如果有图片就渲染出来  没有就给一个默认图片
+      if (this.currentUser.head_img) {
+        this.currentUser.head_img =this.currentUser.head_img;
+      } else {
+        this.currentUser.head_img =
+          "http://127.0.0.1:3000/uploads/image/lu.png";
+      }
     }
-    console.log(this.currentUser);
+    // console.log(this.currentUser);
   }
 };
 </script>

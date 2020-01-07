@@ -15,3 +15,11 @@ export const getUserById = (id)=>{
       
     })
 }
+//编辑用户信息api
+export const getUpDateById = (id,data)=>{
+    return axios ({
+        method:'post',
+        url:`/user_update/${id}`,
+        data
+    })
+}
