@@ -1,6 +1,6 @@
 <template>
   <div class="personal">
-    <router-link to="/edit_profile">
+    <router-link :to="{path:`/edit/${currentUser.id}`}">
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
         <img :src="currentUser.head_img" alt />
@@ -8,7 +8,7 @@
           <div class="name">
             <span class="iconfont iconxingbienan"></span>{{currentUser.nickname}}
           </div>
-          <div class="time">{{currentUser.create_date}}</div>
+          <div class="time">{{currentUser.create_date |dateFormat}} </div>
         </div>
         <span class="iconfont iconjiantou1"></span>
       </div>
@@ -25,6 +25,7 @@
   import mycell from '../components/mycell' //引入单元格 
   import mybutton from '../components/mybutton' // 引入按钮】
   import {getUserById} from '../apis/user' //引入api方法
+  import {dateFormat} from '../components/myfilters' //添加时间过滤器
 export default {
   data () {
     return {
@@ -34,6 +35,9 @@ export default {
   components:{
     mycell,mybutton
   },
+  filters:{
+    dateFormat
+  },
  async mounted (){
         // console.log(this.$route.params.id);
         // console.log(this.currentUser);
@@ -41,7 +45,7 @@ export default {
      let res=await getUserById(this.$route.params.id)
       // console.log(res);
       if(res.data.message==="获取成功"){
-        this.currentUser=res.data.data
+        this.currentUser=res.data.data  //将数据赋值给currentUser
         this.currentUser.head_img = 'http://127.0.0.1:3000' + this.currentUser.head_img
       }
   }

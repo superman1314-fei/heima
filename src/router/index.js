@@ -3,19 +3,28 @@ import VueRouter from 'vue-router' //引入路由模块
 //引入组件
 import Login from '../views/login.vue' //引入登录组件
 import Personal from '../views/personal.vue' //引入个人中心组件
+import Edit from '../views/edit_profile.vue' //编辑中心 
 Vue.use(VueRouter) //挂载路由
 
 //创建路由
 let router =new VueRouter({
+        //登录页
         routes:[{
             name:'Login',
             path:'/login',
             component:Login
         },
+        //个人中心页
         {
             name:'Personal',
             path:'/personal/:id',//添加id
             component:Personal
+        },
+        //编辑页面
+        {
+            name:'Edit',
+            path:'/edit/:id',
+            component:Edit
         }
     ]
 })
