@@ -1,13 +1,19 @@
 <template>
-  <div class="cell">
-      <div class="left" >{{title}}</div>
+  <div class="cell" @click="handlecick">
+      <div class="left">{{title}}</div>
       <div class="right">{{desc}} <span class="iconfont iconjiantou1"></span></div>
   </div>
 </template>
 
 <script>
 export default {
-    props:['title','desc']
+    props:['title','desc'],
+    methods:{
+        handlecick(event){
+            //告诉父组件被点击了
+            this.$emit('click',event)     
+        }
+    }
 }
 </script>
 
