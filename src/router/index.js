@@ -4,6 +4,8 @@ import VueRouter from 'vue-router' //引入路由模块
 import Login from '../views/login.vue' //引入登录组件
 import Personal from '../views/personal.vue' //引入个人中心组件
 import Edit from '../views/edit_profile.vue' //编辑中心 
+import Index from '../views/index.vue'//首页
+import Register from '../views/register.vue'//首页
 Vue.use(VueRouter) //挂载路由
 
 //创建路由
@@ -13,6 +15,18 @@ let router =new VueRouter({
             name:'Login',
             path:'/login',
             component:Login
+        },
+        //首页
+        {
+            name:'Index',
+            path:'/',
+            component:Index
+        },
+        // 注册页
+        {
+            name:'Register',
+            path:'/register',
+            component:Register
         },
         //个人中心页
         {

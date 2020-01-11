@@ -3,22 +3,23 @@
     <div id="app">
       <div class="container">
         <div class="close">
-          <span class="iconfont iconicon-test" @click="$router.push({path:'/'})"></span>
+          <span class="iconfont iconicon-test" @click="$router.push({path:'/login'})"></span>
         </div>
         <div class="logo">
           <span class="iconfont iconnew"></span>
         </div>
         <div class="inputs">
           <!-- 使用文本框  做双向绑定-->
-          <myinput placeholder='请输入手机号' v-model="users.username" :rules='/^(\d{5,6})$|^(1\d{10})$/' msg='请输入正确的用户名/手机号'></myinput>
+          <myinput placeholder='请输入手机号' v-model="users.username" :rules='/^(1\d{10})$/' msg='请输入正确的用户名/手机号'></myinput>
           <myinput placeholder='请输入密码' v-model="users.password" :rules='/^\S{3,16}$/'  msg='请输入正确3-6位的密码'></myinput>
+          <myinput placeholder='请输入昵称' v-model="users.nickname" :rules='/^\w+$/'  msg='请输入正确的用户名/手机号'></myinput>
           <!-- 使用按钮 @click 是子组件传进来的 -->
-          <mybutton @click="login">登录</mybutton>
+          <mybutton @click="register">注册</mybutton>
         </div>
 
         <p class="tips">
-          没有账号？
-          <router-link :to="{name:'Register'}">去注册</router-link>
+          已有账号！！！
+          <router-link :to="{path:'/login'}">去登录</router-link>
         </p>
       </div>
     </div>
@@ -30,14 +31,16 @@
 import mybutton from "../components/mybutton";
 //引入文本框子组件
 import myinput from "../components/myinput";
-//引入路由api方法
-import { login } from '../apis/user'
+//引入路由api方法 注册的api方法
+import {register} from '../apis/user' 
+
 export default {
   data () {
     return {
       users:{
-        username:'10086',
-        password:'123'
+        username:'', //手机
+        password:'', //密码
+        nickname:''//昵称
       }  
     }
   },
@@ -48,22 +51,22 @@ export default {
   },
   methods: {
     // 监听数据
-    async login() {
+    async register() {
   
-      if(/^(\d{5,6})$|^(1\d{10})$/.test(this.users.username) && /^\S{3,16}$/.test(this.users.password)){
-        let res = await login(this.users)
+      if(/^\w+$/.test(this.users.nickname) && /^\S{3,16}$/.test(this.users.password)  && /^(1\d{10})$/.test(this.users.username)){
+         let res = await register (this.users)
           console.log(res);
-          if(res.data.message==='用户不存在'){
+          if(res.data.message==='注册失败'){
             this.$toast.fail(res.data.message)
           }else{
-            localStorage.setItem('heima_token',res.data.data.token)
-            localStorage.setItem('heima_user',JSON.stringify(res.data.data.user))
-            this.$router.push({path:`/personal/${res.data.data.user.id}`}) //传id进去
+            this.$toast.success('注册成功') 
+              this.$router.push({name:'Login'})
           }
       }else{
         this.$toast.fail('输入不合法')
       }
        
+        
         
     },
   

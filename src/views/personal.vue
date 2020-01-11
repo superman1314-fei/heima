@@ -17,7 +17,7 @@
        <mycell title='我的跟帖' desc='跟帖/回复'></mycell>
           <mycell title='我的收藏' desc='视频/文章'></mycell>
              <mycell title='设置' ></mycell>
-             <mybutton id="btn">退出</mybutton>
+             <mybutton id="btn" @click="exit">退出</mybutton>
   </div>
 </template>
 
@@ -48,8 +48,16 @@ export default {
         this.currentUser=res.data.data  //将数据赋值给currentUser
         this.currentUser.head_img =this.currentUser.head_img
       }
+  },
+  methods: {
+    exit(){
+      localStorage.removeItem('heima_token')
+      this.$router.push({name:'Login'})
+      this.$toast.success('退出成功')
+    }
   }
 }
+
 </script>
 
 <style lang='less' scoped>

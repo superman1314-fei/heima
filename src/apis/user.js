@@ -23,3 +23,11 @@ export const getUpDateById = (id,data)=>{
         data
     })
 }
+//注册用户
+export const register = (data)=>{
+    return axios ({
+        method:'post',
+        url:'/register',
+        data
+    })
+}

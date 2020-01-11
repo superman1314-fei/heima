@@ -21,7 +21,10 @@
       <van-field ref="originPass" required label="原密码" placeholder="请输入原密码" />
       <van-field ref="newPass" required label="新密码" placeholder="请输入新密码" />
     </van-dialog>
-    <mycell title="性别" :desc="currentUser.gender===0?'女':'男'"></mycell>
+    <mycell title="性别" :desc="currentUser.gender===0?'女':'男'" @click="nickgender=!nickgender"></mycell>
+    <van-dialog v-model="nickgender" title="修改性别" show-cancel-button @confirm="updateGender">
+    <van-picker  :columns="['女','男']"  @change="onChange" :default-index="currentUser.gender"/>
+    </van-dialog>
   </div>
 </template>
 
@@ -35,8 +38,10 @@ export default {
     return {
       //定义一个数据接收数据
       currentUser: {},
-      nickname: false,
-      nickpassword: false
+      nickname: false,//昵称
+      nickpassword: false,//密码
+      nickgender:false,//性别
+      gender:""
     };
   },
   components: {
@@ -52,11 +57,10 @@ export default {
       let res1 = await uploadFile(formdata);
       if (res1.data.message === "文件上传成功") {
         //  实现预览效果
-        this.currentUser.head_img =
-          "http://127.0.0.1:3000" + res1.data.data.url;
+        this.currentUser.head_img = res1.data.data.url;
 
         let res2 = await getUpDateById(this.$route.params.id, {
-          head_img: this.currentUser.head_img
+          head_img: "http://127.0.0.1:3000" + this.currentUser.head_img
         });
         // console.log(res2);
         if (res2.data.message === "修改成功") {
@@ -104,68 +108,85 @@ export default {
           let res3 = await getUpDateById(this.$route.params.id, {
             password: newPass
           });
-        //   console.log(res3);
+          //   console.log(res3);
           if (res3.data.message === "修改成功") {
             this.$toast.success("修改成功");
             this.currentUser.password = newPass;
           }
-        } 
-      } 
-      // console.log(this.currentUser);
+        }
+      }
+      console.log(this.gender);
     },
     //进行双向绑定 调用方法
-           async beforeClose(action,done){
-            //    第一种方法
-    //         console.log(action);
-    //         if(action=='confirm'){
-    //                let originPass = this.$refs.originPass.$refs.input.value;
-    //                let newPass = this.$refs.newPass.$refs.input.value;
-    //     if (originPass === this.currentUser.password) {
-    //     if (/^\S{3,8}$/.test(newPass)) {
-    //       let res3 = await getUpDateById(this.$route.params.id, {
-    //         password: newPass
-    //       });
-    //     //   console.log(res3);
-    //       if (res3.data.message === "修改成功") {
-    //         this.$toast.success("修改成功");
-    //         this.currentUser.password = newPass;
-    //           done()
-    //       }
-    //     }else{
-    //         done(false)
-    //     }
-    //   }else{
-    //     this.$refs.originPass.$refs.input.focus();
-    //       done(false)
-    //   }
+    async beforeClose(action, done) {
+      //    第一种方法
+      //         console.log(action);
+      //         if(action=='confirm'){
+      //                let originPass = this.$refs.originPass.$refs.input.value;
+      //                let newPass = this.$refs.newPass.$refs.input.value;
+      //     if (originPass === this.currentUser.password) {
+      //     if (/^\S{3,8}$/.test(newPass)) {
+      //       let res3 = await getUpDateById(this.$route.params.id, {
+      //         password: newPass
+      //       });
+      //     //   console.log(res3);
+      //       if (res3.data.message === "修改成功") {
+      //         this.$toast.success("修改成功");
+      //         this.currentUser.password = newPass;
+      //           done()
+      //       }
+      //     }else{
+      //         done(false)
+      //     }
+      //   }else{
+      //     this.$refs.originPass.$refs.input.focus();
+      //       done(false)
+      //   }
 
-    //         }else{
-    //             done() 
-    //         }
-            // console.log(done);
-            // 第二种方法
-            if(action=='confirm'){
-                 let originPass = this.$refs.originPass.$refs.input.value;
-                //    let newPass = this.$refs.newPass.$refs.input.value;
-                   if(originPass !== this.currentUser.password){
-                       this.$toast.fail('请输入正确的密码')
-                       this.$refs.originPass.$refs.input.focus()
-                       done(false)
-                   }else if(!/^\S{3,8}$/.test(this.$refs.newPass.$refs.input.value)){
-                    //    !/^\S{3,16}$/.test(this.$refs.newPass.$refs.input.value)
-                       this.$toast.fail('请正确输入新密码')
-                       done(false)
-                   }else{
-                        done()
-                   }
-
-            }else{
-                done()
-            }
-            
+      //         }else{
+      //             done()
+      //         }
+      // console.log(done);
+      // 第二种方法
+      if (action == "confirm") {
+        let originPass = this.$refs.originPass.$refs.input.value;
+        //    let newPass = this.$refs.newPass.$refs.input.value;
+        if (originPass !== this.currentUser.password) {
+          this.$toast.fail("请输入正确的密码");
+          this.$refs.originPass.$refs.input.focus();
+          done(false);
+        } else if (!/^\S{3,8}$/.test(this.$refs.newPass.$refs.input.value)) {
+          //    !/^\S{3,16}$/.test(this.$refs.newPass.$refs.input.value)
+          this.$toast.fail("请正确输入新密码");
+          done(false);
+        } else {
+          done();
+        }
+      } else {
+        done();
+      }
     },
+    //修改性别
+async updateGender(){
+  console.log(this.gender);
+  
+      let res = await getUpDateById(this.$route.params.id,{'gender':this.gender})
+    console.log(res);
+    
+      if(res.data.message==="修改成功"){
+        this.currentUser.gender=this.gender
+      }
+      
+      
+},
+ onChange(picker, value, index) {
+      this.$toast(`当前值：${value}, 当前索引：${index}`);
+      this.gender=index
+      
+    }
+    
   },
- 
+
   async mounted() {
     //  console.log(this.$route.params.id);  可以获取id
     let res = await getUserById(this.$route.params.id);
@@ -173,15 +194,14 @@ export default {
       this.currentUser = res.data.data;
       //判断是否存在图片 如果有图片就渲染出来  没有就给一个默认图片
       if (this.currentUser.head_img) {
-        this.currentUser.head_img = this.currentUser.head_img;
+        this.currentUser.head_img = 'http://127.0.0.1:3000'+this.currentUser.head_img;
       } else {
-        this.currentUser.head_img =
-          "http://127.0.0.1:3000/uploads/image/lu.png";
+        this.currentUser.head_img = "http://127.0.0.1:3000/uploads/image/lu.png";
       }
     }
-    // console.log(this.currentUser);
+    
   },
-  
+ 
 };
 </script>
 
