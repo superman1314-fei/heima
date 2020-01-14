@@ -5,14 +5,14 @@ import router from './router/index.js'
 //引入css重置样式
 import './style/reset.css'
 //引入全局轻提示
-import { Toast,NavBar,Uploader,Dialog,Field,Picker} from 'vant';
+import { Toast,NavBar,Uploader,Dialog,Field,Picker,Icon} from 'vant';
 Vue.use(Toast) //添加轻提示1
    .use(NavBar) //导航栏
    .use(Uploader) //文件上传
    .use(Dialog )//添加弹出框
    .use(Field)//添加Field输入框
    .use(Picker)//选择器
- 
+  .use(Icon)//图标
 
 Vue.config.productionTip = false
 
