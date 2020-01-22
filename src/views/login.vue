@@ -56,7 +56,7 @@ export default {
           if(res.data.message==='用户不存在'){
             this.$toast.fail(res.data.message)
           }else{
-            localStorage.setItem('heima_token',res.data.data.token)
+            localStorage.setItem('heima_token',res.data.data.token) //token 值
             localStorage.setItem('heima_user',JSON.stringify(res.data.data.user))
             this.$router.push({path:`/personal/${res.data.data.user.id}`}) //传id进去
           }

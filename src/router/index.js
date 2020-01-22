@@ -48,6 +48,8 @@ router.beforeEach((to, from, next) => {
     if(to.path.indexOf('/personal')===0){
         //证明你现在在访问这个页面
         let token=localStorage.getItem('heima_token') 
+        console.log(token);
+        
         //判断这个页面是否存在token值
         if(token){
             //存在就进行下一步操作
@@ -55,6 +57,7 @@ router.beforeEach((to, from, next) => {
         }else{
             // 否则就跳转到登录页需要用户登录
             next({name:'Login'})
+            
             // next()
         }
     }else{
